@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Build output
+.next/
+dist/
+build/
+
+# Uploaded files (runtime user content)
+backend/uploads/
+
+# Logs & OS
+*.log
+.DS_Store
