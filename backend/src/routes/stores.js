@@ -18,6 +18,19 @@ import {
   deleteProduct,
 } from "../controllers/productController.js";
 import { listOrders, updateOrderStatus } from "../controllers/orderController.js";
+import {
+  getDraftTheme,
+  updateDraftTheme,
+  publishTheme,
+  resetTheme,
+} from "../controllers/themeController.js";
+import {
+  listPosts,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+} from "../controllers/blogController.js";
 
 // All routes here require a logged-in owner.
 const router = Router();
@@ -44,5 +57,18 @@ router.delete("/:storeId/products/:productId", requireStoreOwner, deleteProduct)
 
 router.get("/:storeId/orders", requireStoreOwner, listOrders);
 router.patch("/:storeId/orders/:orderId", requireStoreOwner, updateOrderStatus);
+
+// Theme editor (draft / publish)
+router.get("/:storeId/theme", requireStoreOwner, getDraftTheme);
+router.patch("/:storeId/theme", requireStoreOwner, updateDraftTheme);
+router.post("/:storeId/theme/publish", requireStoreOwner, publishTheme);
+router.post("/:storeId/theme/reset", requireStoreOwner, resetTheme);
+
+// Blog posts
+router.get("/:storeId/posts", requireStoreOwner, listPosts);
+router.post("/:storeId/posts", requireStoreOwner, createPost);
+router.get("/:storeId/posts/:postId", requireStoreOwner, getPost);
+router.patch("/:storeId/posts/:postId", requireStoreOwner, updatePost);
+router.delete("/:storeId/posts/:postId", requireStoreOwner, deletePost);
 
 export default router;

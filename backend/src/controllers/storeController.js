@@ -1,8 +1,10 @@
 import { Store, STORE_TYPES } from "../models/Store.js";
 import { Page } from "../models/Page.js";
 import { Product } from "../models/Product.js";
+import { ThemeConfig } from "../models/ThemeConfig.js";
 import { buildDefaultHomePage } from "../utils/defaultPages.js";
 import { buildDefaultProducts } from "../utils/defaultProducts.js";
+import { buildDefaultTheme } from "../utils/defaultTheme.js";
 import { fileUrl } from "../middleware/upload.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
@@ -49,6 +51,10 @@ export const createStore = asyncHandler(async (req, res) => {
 
   // Seed a few starter products so the new storefront isn't empty.
   await Product.insertMany(buildDefaultProducts(storeType, store._id));
+
+  // Seed the theme config (draft + published identical to start).
+  const theme = buildDefaultTheme();
+  await ThemeConfig.create({ storeId: store._id, draft: theme, published: theme });
 
   res.status(201).json({ store });
 });

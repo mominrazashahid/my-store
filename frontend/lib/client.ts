@@ -75,6 +75,18 @@ export type AdminOrder = {
   createdAt: string;
 };
 
+export type AdminBlogPost = {
+  _id: string;
+  title: string;
+  slug: string;
+  coverImage?: string;
+  excerpt?: string;
+  contentMarkdown: string;
+  status: "draft" | "published";
+  publishedAt?: string;
+  updatedAt?: string;
+};
+
 export type AdminPage = {
   slug: string;
   title: string;
@@ -133,6 +145,47 @@ export const api = {
       body: { status },
       token,
     }),
+
+  posts: (token: string, storeId: string) =>
+    request<{ posts: AdminBlogPost[] }>(`/api/stores/${storeId}/posts`, { token }),
+  createPost: (token: string, storeId: string, body: Partial<AdminBlogPost>) =>
+    request<{ post: AdminBlogPost }>(`/api/stores/${storeId}/posts`, {
+      method: "POST",
+      body,
+      token,
+    }),
+  updatePost: (token: string, storeId: string, id: string, body: Partial<AdminBlogPost>) =>
+    request<{ post: AdminBlogPost }>(`/api/stores/${storeId}/posts/${id}`, {
+      method: "PATCH",
+      body,
+      token,
+    }),
+  deletePost: (token: string, storeId: string, id: string) =>
+    request<{ ok: boolean }>(`/api/stores/${storeId}/posts/${id}`, {
+      method: "DELETE",
+      token,
+    }),
+
+  getTheme: (token: string, storeId: string) =>
+    request<{ theme: import("./theme").ThemeData }>(`/api/stores/${storeId}/theme`, {
+      token,
+    }),
+  updateTheme: (token: string, storeId: string, theme: import("./theme").ThemeData) =>
+    request<{ theme: import("./theme").ThemeData }>(`/api/stores/${storeId}/theme`, {
+      method: "PATCH",
+      body: { theme },
+      token,
+    }),
+  publishTheme: (token: string, storeId: string) =>
+    request<{ theme: import("./theme").ThemeData }>(
+      `/api/stores/${storeId}/theme/publish`,
+      { method: "POST", token }
+    ),
+  resetTheme: (token: string, storeId: string) =>
+    request<{ theme: import("./theme").ThemeData }>(
+      `/api/stores/${storeId}/theme/reset`,
+      { method: "POST", token }
+    ),
 
   getPage: (token: string, storeId: string, slug = "home") =>
     request<{ page: AdminPage }>(`/api/stores/${storeId}/pages/${slug}`, { token }),

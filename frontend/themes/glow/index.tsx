@@ -12,16 +12,36 @@ function discountPct(price: number, compare?: number) {
   return Math.round(((compare - price) / compare) * 100);
 }
 
-function Navbar({ content }: SectionContext) {
+// Resolve a navbar link against the store's base path so internal links stay
+// inside the store (e.g. "/" -> "/store/glow-demo", "/blog" -> ".../blog").
+// External (http) and anchor (#) links pass through untouched.
+function resolveHref(href: string | undefined, base: string) {
+  if (!href) return base || "/";
+  if (/^https?:\/\//.test(href) || href.startsWith("#")) return href;
+  const rest = href === "/" ? "" : href.startsWith("/") ? href : `/${href}`;
+  return `${base}${rest}` || "/";
+}
+
+function Navbar({ content, store }: SectionContext) {
   const logo = (content.logo as string) || "Store";
-  const links = (content.links as { label: string; href: string }[]) || [];
+  const base = store.basePath || "";
+  const configured = (content.links as { label: string; href: string }[]) || [];
+
+  // always surface a Blog link (append if the owner hasn't added one)
+  const hasBlog = configured.some(
+    (l) => /blog/i.test(l.href || "") || /blog/i.test(l.label || "")
+  );
+  const links = hasBlog ? configured : [...configured, { label: "Blog", href: "/blog" }];
+
   return (
     <nav className={styles.nav}>
-      <span className={styles.logo}>{logo}</span>
+      <a className={styles.logo} href={base || "/"}>
+        {logo}
+      </a>
       <ul className={styles.navLinks}>
         {links.map((l, i) => (
           <li key={i}>
-            <a href={l.href}>{l.label}</a>
+            <a href={resolveHref(l.href, base)}>{l.label}</a>
           </li>
         ))}
       </ul>

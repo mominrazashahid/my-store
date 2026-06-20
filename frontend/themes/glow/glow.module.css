@@ -1,30 +1,32 @@
 .theme {
-  --accent: #e84f8c;
-  --accent-dark: #c43a72;
-  --ink: #211a1d;
-  --muted: #8a7a82;
-  --bg: #fff7fb;
-  --card: #ffffff;
-  --line: #f1dbe6;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  /* Alias the theme-editor variables (injected on [data-theme-root]) into the
+     names this stylesheet uses, with fallbacks to the original glow palette. */
+  --accent: var(--c-primary, #e84f8c);
+  --accent-dark: var(--c-accent, #c43a72);
+  --ink: var(--c-text, #211a1d);
+  --muted: var(--c-muted, #8a7a82);
+  --bg: var(--c-bg, #fff7fb);
+  --card: var(--c-surface, #ffffff);
+  --line: var(--c-border, #f1dbe6);
+  font-family: var(--font-body, "Segoe UI", system-ui, sans-serif);
   color: var(--ink);
   background: var(--bg);
 }
 
 /* Navbar */
 .nav {
-  display: flex;
+  display: var(--nav-display, flex);
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: saturate(180%) blur(8px);
+  padding: var(--nav-pad-y, 16px) var(--nav-pad-x, 32px);
+  background: var(--nav-bg, #ffffff);
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   z-index: 20;
 }
 .logo {
+  font-family: var(--font-heading, inherit);
   font-size: 22px;
   font-weight: 800;
   color: var(--accent-dark);
@@ -38,7 +40,7 @@
   padding: 0;
 }
 .navLinks a {
-  color: var(--ink);
+  color: var(--nav-link, var(--ink));
   text-decoration: none;
   font-weight: 500;
   font-size: 15px;
@@ -50,13 +52,13 @@
 /* Hero */
 .hero {
   position: relative;
-  min-height: 460px;
-  display: grid;
+  min-height: var(--hero-min-h, 460px);
+  display: var(--hero-display, grid);
   place-items: center;
   text-align: center;
-  padding: 80px 24px;
+  padding: var(--hero-pad-y, 80px) 24px;
   overflow: hidden;
-  background: linear-gradient(135deg, #ffe3f0 0%, #fff7fb 60%);
+  background: linear-gradient(135deg, #ffe3f0 0%, var(--bg) 60%);
 }
 .heroBg {
   position: absolute;
@@ -70,11 +72,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(20, 8, 14, 0.35) 0%,
-    rgba(20, 8, 14, 0.55) 100%
-  );
+  background: rgba(20, 8, 14, var(--hero-overlay, 0.45));
 }
 .heroInner {
   position: relative;
@@ -82,7 +80,8 @@
   max-width: 620px;
 }
 .heroHeading {
-  font-size: 52px;
+  font-family: var(--font-heading, inherit);
+  font-size: var(--hero-h-size, 52px);
   line-height: 1.05;
   font-weight: 800;
   margin: 0 0 14px;
@@ -95,7 +94,7 @@
 }
 /* text colors flip depending on whether there's a photo behind */
 .heroOnImage {
-  color: #fff;
+  color: var(--hero-text, #fff);
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
 }
 .heroOnPlain .heroHeading {
@@ -123,6 +122,7 @@
 
 /* Products */
 .products {
+  display: var(--products-display, block);
   padding: 64px 28px;
   max-width: 1180px;
   margin: 0 auto;
@@ -132,6 +132,7 @@
   margin-bottom: 40px;
 }
 .productsTitle {
+  font-family: var(--font-heading, inherit);
   font-size: 32px;
   font-weight: 800;
   margin: 0;
@@ -146,13 +147,13 @@
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 26px;
+  grid-template-columns: repeat(var(--grid-cols, 4), minmax(0, 1fr));
+  gap: var(--grid-gap, 26px);
 }
 .card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
+  background: var(--card-bg, var(--card));
+  border: 1px solid var(--card-border, var(--line));
+  border-radius: var(--card-radius, 18px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -257,14 +258,15 @@
 
 /* Footer */
 .footer {
-  background: #2a1a22;
-  color: #f3e3eb;
+  display: var(--footer-display, block);
+  background: var(--footer-bg, #2a1a22);
+  color: var(--footer-text, #f3e3eb);
   margin-top: 40px;
 }
 .footerInner {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 44px 28px;
+  padding: var(--footer-pad-y, 44px) 28px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

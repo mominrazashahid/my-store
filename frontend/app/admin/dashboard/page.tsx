@@ -10,7 +10,9 @@ import {
   type AdminProduct,
   type AdminPage,
   type AdminOrder,
+  type AdminBlogPost,
 } from "@/lib/client";
+import { Markdown } from "@/components/blog/Markdown";
 import styles from "../admin.module.css";
 
 const FREE_LIMIT = 20;
@@ -20,9 +22,9 @@ export default function DashboardPage() {
   const [token, setToken] = useState<string | null>(null);
   const [stores, setStores] = useState<AdminStore[]>([]);
   const [active, setActive] = useState<AdminStore | null>(null);
-  const [tab, setTab] = useState<"products" | "orders" | "appearance" | "settings">(
-    "products"
-  );
+  const [tab, setTab] = useState<
+    "products" | "orders" | "blog" | "appearance" | "settings"
+  >("products");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -98,7 +100,7 @@ export default function DashboardPage() {
             ) : null}
 
             <div className={styles.tabs}>
-              {(["products", "orders", "appearance", "settings"] as const).map((t) => (
+              {(["products", "orders", "blog", "appearance", "settings"] as const).map((t) => (
                 <button
                   key={t}
                   className={`${styles.tab} ${tab === t ? styles.tabActive : ""}`}
@@ -111,6 +113,7 @@ export default function DashboardPage() {
 
             {tab === "products" && <ProductsTab token={token} store={active} />}
             {tab === "orders" && <OrdersTab token={token} store={active} />}
+            {tab === "blog" && <BlogTab token={token} store={active} />}
             {tab === "appearance" && <AppearanceTab token={token} store={active} />}
             {tab === "settings" && (
               <SettingsTab
@@ -571,6 +574,40 @@ function AppearanceTab({ token, store }: { token: string; store: AdminStore }) {
     });
   }
 
+  // ---- navbar (logo + links) ----
+  const navIdx = page.sections.findIndex((s) => s.type === "navbar");
+  const navContent = (page.sections[navIdx]?.content || {}) as {
+    logo?: string;
+    links?: { label: string; href: string }[];
+  };
+  const links = navContent.links || [];
+
+  function setNav(nextContent: Record<string, unknown>) {
+    setPage((p) => {
+      if (!p) return p;
+      const sections = p.sections.map((s, i) =>
+        i === navIdx ? { ...s, content: nextContent } : s
+      );
+      return { ...p, sections };
+    });
+  }
+  function setLink(i: number, key: "label" | "href", value: string) {
+    setNav({ ...navContent, links: links.map((l, idx) => (idx === i ? { ...l, [key]: value } : l)) });
+  }
+  function addLink() {
+    setNav({ ...navContent, links: [...links, { label: "New link", href: "/" }] });
+  }
+  function removeLink(i: number) {
+    setNav({ ...navContent, links: links.filter((_, idx) => idx !== i) });
+  }
+  function moveLink(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= links.length) return;
+    const next = [...links];
+    [next[i], next[j]] = [next[j], next[i]];
+    setNav({ ...navContent, links: next });
+  }
+
   async function save() {
     if (!page) return;
     setBusy(true);
@@ -587,9 +624,125 @@ function AppearanceTab({ token, store }: { token: string; store: AdminStore }) {
 
   return (
     <div>
-      <h2 className={styles.h}>Hero section</h2>
-      <p className={styles.sub}>The big banner at the top of your store.</p>
+      <div
+        style={{
+          background: "#15233f",
+          border: "1px solid #243049",
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 22,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+        }}
+      >
+        <div>
+          <div style={{ fontWeight: 700 }}>🎨 Theme editor</div>
+          <div className={styles.sub} style={{ margin: 0 }}>
+            Customize colors, fonts, spacing & layout — with live preview per device.
+          </div>
+        </div>
+        <a
+          className={`${styles.btn} ${styles.primary}`}
+          href={`/admin/theme?store=${store._id}`}
+        >
+          Open editor →
+        </a>
+      </div>
+
       {msg ? <div className={styles.ok}>{msg}</div> : null}
+
+      {navIdx >= 0 ? (
+        <>
+          <h2 className={styles.h}>Navbar</h2>
+          <p className={styles.sub}>Your store name and the links shown in the top menu.</p>
+
+          <div className={styles.field}>
+            <label className={styles.label}>Logo / store name text</label>
+            <input
+              className={styles.input}
+              value={navContent.logo || ""}
+              onChange={(e) => setNav({ ...navContent, logo: e.target.value })}
+            />
+          </div>
+
+          <datalist id="nav-targets">
+            <option value="/">Home</option>
+            <option value="/blog">Blog</option>
+            <option value="#products">Products section</option>
+          </datalist>
+
+          <label className={styles.label}>Links</label>
+          {links.length === 0 ? (
+            <p className={styles.sub} style={{ marginTop: 4 }}>
+              No links yet. A “Blog” link is shown automatically until you add your own.
+            </p>
+          ) : null}
+          {links.map((l, i) => (
+            <div
+              key={i}
+              style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}
+            >
+              <input
+                className={styles.input}
+                style={{ flex: 1 }}
+                value={l.label}
+                placeholder="Label (e.g. Home)"
+                onChange={(e) => setLink(i, "label", e.target.value)}
+              />
+              <input
+                className={styles.input}
+                style={{ flex: 1 }}
+                list="nav-targets"
+                value={l.href}
+                placeholder="Target (/ , /blog, #products)"
+                onChange={(e) => setLink(i, "href", e.target.value)}
+              />
+              <button
+                className={`${styles.btn} ${styles.ghost}`}
+                onClick={() => moveLink(i, -1)}
+                disabled={i === 0}
+                title="Move up"
+              >
+                ↑
+              </button>
+              <button
+                className={`${styles.btn} ${styles.ghost}`}
+                onClick={() => moveLink(i, 1)}
+                disabled={i === links.length - 1}
+                title="Move down"
+              >
+                ↓
+              </button>
+              <button
+                className={`${styles.btn} ${styles.danger}`}
+                onClick={() => removeLink(i)}
+                title="Remove"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button
+            className={`${styles.btn} ${styles.ghost}`}
+            onClick={addLink}
+            style={{ marginTop: 4 }}
+          >
+            + Add link
+          </button>
+
+          <p className={styles.sub} style={{ marginTop: 10, fontSize: 12 }}>
+            Tip: use <code>/</code> for home, <code>/blog</code> for the blog, or{" "}
+            <code>#products</code> to jump to products. External links (https://…) also work.
+          </p>
+
+          <hr style={{ border: "none", borderTop: "1px solid #243049", margin: "26px 0" }} />
+        </>
+      ) : null}
+
+      <h2 className={styles.h}>Hero content</h2>
+      <p className={styles.sub}>The big banner text & image at the top of your store.</p>
 
       <div className={styles.field}>
         <label className={styles.label}>Hero image</label>
@@ -655,6 +808,274 @@ function AppearanceTab({ token, store }: { token: string; store: AdminStore }) {
       <button className={`${styles.btn} ${styles.primary}`} onClick={save} disabled={busy}>
         {busy ? "Saving…" : "Save changes"}
       </button>
+    </div>
+  );
+}
+
+/* --------------------------------- Blog ---------------------------------- */
+
+const blankPost: Partial<AdminBlogPost> = {
+  title: "",
+  slug: "",
+  excerpt: "",
+  coverImage: "",
+  contentMarkdown: "",
+  status: "draft",
+};
+
+function BlogTab({ token, store }: { token: string; store: AdminStore }) {
+  const [posts, setPosts] = useState<AdminBlogPost[]>([]);
+  const [editing, setEditing] = useState<Partial<AdminBlogPost> | null>(null);
+  const [error, setError] = useState("");
+
+  const load = useCallback(() => {
+    api.posts(token, store._id).then(({ posts }) => setPosts(posts));
+  }, [token, store._id]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  async function remove(id: string) {
+    if (!confirm("Delete this post?")) return;
+    await api.deletePost(token, store._id, id);
+    load();
+  }
+
+  if (editing) {
+    return (
+      <PostEditor
+        token={token}
+        store={store}
+        post={editing}
+        onCancel={() => setEditing(null)}
+        onSaved={() => {
+          setEditing(null);
+          load();
+        }}
+        onError={setError}
+      />
+    );
+  }
+
+  return (
+    <div>
+      <div className={styles.toolbar}>
+        <div className={styles.count}>{posts.length} posts</div>
+        <button
+          className={`${styles.btn} ${styles.primary}`}
+          onClick={() => setEditing({ ...blankPost })}
+        >
+          + New post
+        </button>
+      </div>
+      {error ? <div className={styles.error}>{error}</div> : null}
+      {posts.length === 0 ? (
+        <p className={styles.sub}>No posts yet. Write your first one!</p>
+      ) : (
+        posts.map((p) => (
+          <div key={p._id} className={styles.postRow}>
+            {p.coverImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img className={styles.postThumb} src={p.coverImage} alt="" />
+            ) : (
+              <div className={styles.postThumb} />
+            )}
+            <div className={styles.postInfo}>
+              <div className={styles.postName}>{p.title}</div>
+              <div className={styles.postSub}>
+                <span
+                  className={`${styles.statusBadge} ${
+                    p.status === "published" ? styles.s_delivered : styles.s_pending
+                  }`}
+                >
+                  {p.status}
+                </span>{" "}
+                · /blog/{p.slug}
+              </div>
+            </div>
+            {p.status === "published" ? (
+              <a
+                className={`${styles.btn} ${styles.ghost}`}
+                href={`/store/${store.subdomain}/blog/${p.slug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View
+              </a>
+            ) : null}
+            <button className={`${styles.btn} ${styles.ghost}`} onClick={() => setEditing(p)}>
+              Edit
+            </button>
+            <button className={`${styles.btn} ${styles.danger}`} onClick={() => remove(p._id)}>
+              Delete
+            </button>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
+function PostEditor({
+  token,
+  store,
+  post,
+  onCancel,
+  onSaved,
+  onError,
+}: {
+  token: string;
+  store: AdminStore;
+  post: Partial<AdminBlogPost>;
+  onCancel: () => void;
+  onSaved: () => void;
+  onError: (m: string) => void;
+}) {
+  const [form, setForm] = useState<Partial<AdminBlogPost>>({ ...post });
+  const [busy, setBusy] = useState(false);
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const isEdit = Boolean(post._id);
+
+  function set<K extends keyof AdminBlogPost>(k: K, v: AdminBlogPost[K]) {
+    setForm((f) => ({ ...f, [k]: v }));
+  }
+
+  // insert markdown image at the cursor position in the body textarea
+  function insertImage(url: string) {
+    const ta = taRef.current;
+    const md = `\n![image](${url})\n`;
+    const cur = form.contentMarkdown || "";
+    if (!ta) return set("contentMarkdown", cur + md);
+    const start = ta.selectionStart ?? cur.length;
+    set("contentMarkdown", cur.slice(0, start) + md + cur.slice(start));
+  }
+
+  async function save(status: "draft" | "published") {
+    if (!form.title) {
+      onError("Title is required");
+      return;
+    }
+    setBusy(true);
+    try {
+      const body = {
+        title: form.title,
+        slug: form.slug,
+        excerpt: form.excerpt,
+        coverImage: form.coverImage,
+        contentMarkdown: form.contentMarkdown,
+        status,
+      };
+      if (isEdit) await api.updatePost(token, store._id, post._id!, body);
+      else await api.createPost(token, store._id, body);
+      onSaved();
+    } catch (e) {
+      onError(e instanceof Error ? e.message : "Save failed");
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className={styles.toolbar}>
+        <h2 className={styles.h}>{isEdit ? "Edit post" : "New post"}</h2>
+        <button className={`${styles.btn} ${styles.ghost}`} onClick={onCancel}>
+          ← Back
+        </button>
+      </div>
+
+      <div className={styles.field}>
+        <label className={styles.label}>Title</label>
+        <input
+          className={styles.input}
+          value={form.title || ""}
+          onChange={(e) => set("title", e.target.value)}
+          placeholder="5 Makeup Tips for Summer"
+        />
+      </div>
+      <div className={styles.row2}>
+        <div className={styles.field}>
+          <label className={styles.label}>URL slug (optional)</label>
+          <input
+            className={styles.input}
+            value={form.slug || ""}
+            onChange={(e) => set("slug", e.target.value)}
+            placeholder="auto from title"
+          />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label}>Cover image</label>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            {form.coverImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={form.coverImage}
+                alt=""
+                style={{ width: 54, height: 36, objectFit: "cover", borderRadius: 6 }}
+              />
+            ) : null}
+            <ImageUploader
+              token={token}
+              storeId={store._id}
+              label={form.coverImage ? "Replace" : "Upload cover"}
+              onUploaded={(url) => set("coverImage", url)}
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label}>Excerpt</label>
+        <input
+          className={styles.input}
+          value={form.excerpt || ""}
+          onChange={(e) => set("excerpt", e.target.value)}
+          placeholder="Short summary shown in the blog list"
+        />
+      </div>
+
+      <div className={styles.field}>
+        <div className={styles.paneLabel}>
+          <span>Content (Markdown)</span>
+          <ImageUploader
+            token={token}
+            storeId={store._id}
+            label="+ Insert image"
+            onUploaded={insertImage}
+          />
+        </div>
+        <div className={styles.mdEditor}>
+          <textarea
+            ref={taRef}
+            className={styles.mdTextarea}
+            value={form.contentMarkdown || ""}
+            onChange={(e) => set("contentMarkdown", e.target.value)}
+            placeholder={"# Heading\n\nWrite your post in **markdown**.\n\n- bullet\n- list"}
+          />
+          <div className={styles.mdPane}>
+            <div className={styles.paneLabel}>Preview</div>
+            <div className={styles.mdPreview}>
+              <Markdown>{form.contentMarkdown || "*Nothing to preview yet.*"}</Markdown>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10 }}>
+        <button
+          className={`${styles.btn} ${styles.ghost}`}
+          onClick={() => save("draft")}
+          disabled={busy}
+        >
+          Save draft
+        </button>
+        <button
+          className={`${styles.btn} ${styles.primary}`}
+          onClick={() => save("published")}
+          disabled={busy}
+        >
+          {busy ? "Saving…" : "Publish"}
+        </button>
+      </div>
     </div>
   );
 }
