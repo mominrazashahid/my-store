@@ -1,18 +1,9 @@
-# Dependencies
-node_modules/
+# App-specific rules live in laravel/.gitignore
 
 # Env / secrets
 .env
 .env.*
 !.env.example
-
-# Build output
-.next/
-dist/
-build/
-
-# Uploaded files (runtime user content)
-backend/uploads/
 
 # Logs & OS
 *.log

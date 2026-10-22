@@ -1,0 +1,192 @@
+.theme {
+  /* Alias the theme-editor variables (injected on [data-theme-root]) into the
+     names this stylesheet uses, with fallbacks to the original glow palette. */
+  --accent: var(--c-primary, #a47148);
+  --accent-dark: var(--c-accent, #7f5534);
+  --ink: var(--c-text, #2b2118);
+  --muted: var(--c-muted, #76685b);
+  --bg: var(--c-bg, #fbf8f4);
+  --card: var(--c-surface, #ffffff);
+  --line: var(--c-border, #ece2d6);
+  font-family: var(--font-body, "Segoe UI", system-ui, sans-serif);
+  color: var(--ink);
+  background: var(--bg);
+}
+
+/* Hero */
+.hero {
+  display: var(--hero-display, block);
+  background: var(--bg);
+}
+/* the owner's banner image, full width, no text or overlay on top */
+.heroImage {
+  display: block;
+  width: 100%;
+  height: var(--hero-min-h, 460px);
+  object-fit: cover;
+}
+
+/* Products */
+.products {
+  display: var(--products-display, block);
+  padding: 36px 28px 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 4), minmax(0, 1fr));
+  gap: var(--grid-gap, 26px);
+}
+.card {
+  background: var(--card-bg, var(--card));
+  border: 1px solid var(--card-border, var(--line));
+  border-radius: var(--card-radius, 18px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(164, 113, 72, 0.18);
+}
+.thumbWrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #f3e7da, #fff);
+  overflow: hidden;
+}
+.thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.thumbPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  font-size: 46px;
+  opacity: 0.5;
+}
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+}
+.soldout {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #4b4b4b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+.cardBody {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.price {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--accent-dark);
+}
+.compare {
+  color: var(--muted);
+  text-decoration: line-through;
+  font-weight: 500;
+  font-size: 14px;
+}
+.buy {
+  margin-top: auto;
+  border: 1px solid var(--accent);
+  background: #fff;
+  color: var(--accent-dark);
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.buy:hover {
+  background: var(--accent);
+  color: #fff;
+}
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px;
+}
+
+/* Store info (contact + address) — a light strip above StoreBuilder's footer */
+.footer {
+  display: var(--footer-display, block);
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+}
+.footerInner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 24px;
+}
+.footerCol h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.footerCol p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.footerCol a {
+  color: var(--accent-dark);
+}
+
+/* ---- icons (lucide SVGs) ---- */
+.contactLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* product cards link to the product page */
+.thumbWrap {
+  display: block;
+}
+.cardTitle a {
+  color: inherit;
+}
+.cardTitle a:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,211 @@
+/* StoreBuilder header + footer — the platform's light-brown palette, the same
+   on the marketplace and on every store page regardless of the store's theme. */
+.header,
+.footer {
+  --brand: #a47148;
+  --brand-dark: #7f5534;
+  --ink: #2b2118;
+  --muted: #76685b;
+  --line: #ece2d6;
+  --surface: #ffffff;
+  --bg: #fbf8f4;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+/* ---- header ---- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+.logo span {
+  color: var(--brand);
+}
+.links {
+  display: flex;
+  gap: 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.links a:hover {
+  color: var(--brand);
+}
+.search {
+  flex: 1;
+  max-width: 520px;
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 10px 4px 10px 18px;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+}
+/* a magnifier icon inside the field; Enter also searches */
+.search button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 14px;
+  cursor: pointer;
+}
+.search button:hover {
+  color: var(--brand);
+}
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.btnPrimary,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.btnPrimary {
+  padding: 9px 18px;
+  background: var(--brand);
+  color: #fff;
+}
+.btnPrimary:hover {
+  background: var(--brand-dark);
+}
+.btnGhost {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.btnGhost:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+/* ---- footer ---- */
+.footer {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+.footerInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footerNote {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+.footerLinks {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.footerLinks a:hover {
+  color: var(--brand);
+}
+.footerBar {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 16px 20px 24px;
+}
+
+@media (max-width: 860px) {
+  .links {
+    display: none;
+  }
+  /* search drops to its own full-width row instead of disappearing */
+  .inner {
+    flex-wrap: wrap;
+  }
+  .search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+@media (max-width: 640px) {
+  .inner {
+    padding: 10px 16px;
+    gap: 10px;
+  }
+  .logo {
+    font-size: 19px;
+  }
+  .btnGhost,
+  .btnPrimary {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ---- cart link ---- */
+.cartLink {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  color: var(--ink);
+}
+.cartLink:hover {
+  background: var(--bg);
+  color: var(--brand);
+}
+.cartCount {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}

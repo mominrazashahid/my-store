@@ -1,0 +1,189 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f7efe5 0%, #fdf9f3 100%);
+  color: #2b2118;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  display: grid;
+  place-items: center;
+  padding: 40px 20px;
+}
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border: 1px solid #ece2d6;
+  border-radius: 16px;
+  padding: 32px;
+}
+.steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.step {
+  flex: 1;
+  height: 4px;
+  border-radius: 99px;
+  background: #ece2d6;
+}
+.stepActive {
+  background: #a47148;
+}
+.h {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+.sub {
+  color: #76685b;
+  margin: 0 0 22px;
+  font-size: 14px;
+}
+.field {
+  margin-bottom: 16px;
+}
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #4a3d31;
+}
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border-radius: 9px;
+  border: 1px solid #dccbb8;
+  background: #fffdfa;
+  color: #2b2118;
+  font-size: 15px;
+}
+.input:focus {
+  outline: none;
+  border-color: #a47148;
+}
+.hint {
+  font-size: 12px;
+  color: #9a8b7c;
+  margin-top: 6px;
+}
+.urlPreview {
+  color: #c8925a;
+}
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.typeCard {
+  border: 1px solid #dccbb8;
+  background: #fffdfa;
+  border-radius: 12px;
+  padding: 16px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.typeCard:hover {
+  transform: translateY(-2px);
+}
+.typeCardActive {
+  border-color: #a47148;
+  box-shadow: 0 0 0 1px #a47148 inset;
+}
+.typeEmoji {
+  display: flex;
+  justify-content: center;
+  color: #a47148;
+}
+.typeLabel {
+  font-weight: 700;
+  margin-top: 6px;
+}
+.typeBlurb {
+  font-size: 11px;
+  color: #76685b;
+  margin-top: 2px;
+}
+.themeRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.themeCard {
+  flex: 1;
+  min-width: 180px;
+  border: 1px solid #dccbb8;
+  background: #fffdfa;
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+}
+.themeCardActive {
+  border-color: #a47148;
+  box-shadow: 0 0 0 1px #a47148 inset;
+}
+.themeName {
+  font-weight: 700;
+}
+.themePreview {
+  font-size: 12px;
+  color: #76685b;
+  margin-top: 4px;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+}
+.primary {
+  background: #a47148;
+  color: #fff;
+}
+.primary:hover {
+  background: #7f5534;
+}
+.primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.ghost {
+  background: transparent;
+  color: #4a3d31;
+  border: 1px solid #dccbb8;
+}
+.error {
+  background: #fbeae4;
+  border: 1px solid #e8b4a0;
+  color: #b4532a;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.foot {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #9a8b7c;
+}
+.foot a {
+  color: #a47148;
+  text-decoration: none;
+}
+
+/* styled dropdowns fill their field */
+.selectFull {
+  display: block;
+  width: 100%;
+}

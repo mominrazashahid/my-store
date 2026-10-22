@@ -1,0 +1,343 @@
+/* Product page. Colors come from the store theme's variables
+   (--accent, --ink, --line, ...), so it matches whatever theme the store uses. */
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 64px;
+}
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+.crumb:hover {
+  color: var(--accent);
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+/* gallery */
+.mainImage {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--card-radius, 18px);
+  overflow: hidden;
+  background: linear-gradient(135deg, #f3e7da, #fff);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+.mainImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+.thumb {
+  flex: 0 0 72px;
+  height: 72px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  background: none;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.thumbActive {
+  border-color: var(--accent);
+}
+
+/* info */
+.title {
+  font-family: var(--font-heading, inherit);
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 0 0 14px;
+}
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.price {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+.compare {
+  color: var(--muted);
+  text-decoration: line-through;
+  font-size: 17px;
+}
+.badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  align-self: center;
+}
+.stockIn,
+.stockOut {
+  margin: 14px 0 22px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.stockIn {
+  color: #2f6b45;
+}
+.stockOut {
+  color: #b4532a;
+}
+.buyRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.qty button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 48px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.qty button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.qty span {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+.addBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+}
+.addBtn:hover {
+  background: var(--accent-dark);
+}
+.delivery {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.description h2 {
+  font-size: 16px;
+  margin: 22px 0 8px;
+}
+.description p {
+  color: var(--ink);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* related */
+.related {
+  margin-top: 64px;
+}
+.relatedTitle {
+  font-family: var(--font-heading, inherit);
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.relatedCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.15s;
+}
+.relatedCard:hover {
+  transform: translateY(-3px);
+}
+.relatedThumb {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #f3e7da, #fff);
+  color: var(--accent);
+}
+.relatedThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.relatedBody {
+  padding: 10px 12px 12px;
+  display: grid;
+  gap: 4px;
+}
+.relatedName {
+  font-weight: 600;
+  font-size: 14px;
+}
+.relatedPrice {
+  font-weight: 800;
+  color: var(--accent-dark);
+  font-size: 14px;
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .relatedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .title {
+    font-size: 26px;
+  }
+}
+@media (max-width: 640px) {
+  .wrap {
+    padding: 18px 16px 48px;
+  }
+}
+
+/* ---- seller box ---- */
+.seller {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.sellerIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #f3e7da;
+  color: var(--accent-dark);
+  flex-shrink: 0;
+}
+.sellerInfo {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.sellerInfo strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sellerLabel {
+  font-size: 12px;
+  color: var(--muted);
+}
+.sellerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--accent);
+  color: var(--accent-dark);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.sellerBtn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---- more from this store ---- */
+.relatedHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.relatedHead .relatedTitle {
+  margin: 0;
+}
+.relatedLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-dark);
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.relatedLink:hover {
+  color: var(--accent);
+}
+.viewStore {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+.viewStoreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 13px 26px;
+  border-radius: 999px;
+}
+.viewStoreBtn:hover {
+  background: var(--accent-dark);
+}
