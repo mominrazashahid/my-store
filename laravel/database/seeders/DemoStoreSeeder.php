@@ -73,7 +73,6 @@ class DemoStoreSeeder extends Seeder
                 ['title' => 'Nail Polish Set (6)', 'price' => 150000, 'stock' => 22],
             ]);
 
-
             // 'lawn-house' was an earlier demo store name
             Store::whereIn('subdomain', ['lawn-house', ...array_keys(self::NEIGHBOURS)])->delete();
 

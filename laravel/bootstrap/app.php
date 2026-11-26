@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,8 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
+            HandleInertiaRequests::class,
         ]);
+        // behind a tunnel or load balancer (ngrok demos, hosting), trust the forwarded
+        // https/host headers so generated URLs match what the visitor sees
+        $middleware->trustProxies(at: '*');
         // logged-out owners go to the login page; logged-in owners skip login/signup
         $middleware->redirectGuestsTo('/admin');
         $middleware->redirectUsersTo('/admin/dashboard');

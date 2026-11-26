@@ -52,7 +52,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
-
         Route::get('/appearance', [AppearanceController::class, 'edit'])->name('appearance.edit');
         Route::patch('/appearance', [AppearanceController::class, 'update'])->name('appearance.update');
 

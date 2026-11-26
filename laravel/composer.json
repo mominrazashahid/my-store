@@ -1,10 +1,10 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "mominrazashahid/my-store",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
+    "description": "Open-source online store builder with a shared marketplace.",
+    "keywords": ["laravel", "inertia", "ecommerce", "marketplace", "store-builder"],
+    "license": "AGPL-3.0-only",
     "require": {
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^3.5",
